@@ -4,14 +4,13 @@
         <members>*</members>
         <name>ApexClass</name>
     </types>
-     <types>
-        <members>API_Config_Settings__c</members>
-        <name>Object</name>
-    </types>
-    
     <types>
         <members>*</members>
         <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>CustomObject</name>
     </types>
     <types>
         <members>*</members>

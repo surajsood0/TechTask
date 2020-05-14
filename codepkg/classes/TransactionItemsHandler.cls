@@ -11,38 +11,46 @@ public with sharing class TransactionItemsHandler {
 
         
     // handle logic for before insert
-    public void OnBeforeInsert(List<TransactionItem__c> newTxnItems)
-    {
-    
-    }
-
-    // handle logic for after insert
-    public void OnAfterInsert(List<TransactionItem__c> newTxnItems)
-    {
-        //check transaction Items match the criteria to makemake API call
-		TransactionItemsBusinesslogic.syncTransactions(newTxnItems);
-    }
-
-    // handle logic for after update
-    public void OnAfterUpdate( List<TransactionItem__c> newTxnItems, List<TransactionItem__c> oldTxnItems, 
-                              Map<ID, TransactionItem__c> newTxnItemsMap , Map<ID, TransactionItem__c> oldTxnItemsMap )
+    public void OnBeforeInsert(Map<ID, TransactionItem__c> newTxnItemsMap)
     {
         //logic
     }
 
+    // handle logic for after insert
+    public void OnAfterInsert(Map<ID, TransactionItem__c> newTxnItemsMap, Map<ID, TransactionItem__c> oldTxnItemsMap)
+    {
+        OnAfterInsertAsync(newTxnItemsMap.keySet());//call future method
+    }
+
+    // handle logic for after update
+    public void OnAfterUpdate( Map<ID, TransactionItem__c> newTxnItemsMap, Map<ID, TransactionItem__c> oldTxnItemsMap )
+    {
+        OnAfterUpdateAsync(newTxnItemsMap.keySet());//call future method
+		    
+    }
+
     //handle logic for before insert
-    public void OnBeforeUpdate( List<TransactionItem__c> newTxnItems, List<TransactionItem__c> oldTxnItems, 
-                               Map<ID, TransactionItem__c> newTxnItemsMap , Map<ID, TransactionItem__c> oldTxnItemsMap )
+    public void OnBeforeUpdate( Map<ID, TransactionItem__c> newTxnItemsMap, Map<ID, TransactionItem__c> oldTxnItemsMap )
     {
         //logic
     }
 
     //this method can be used to perform async operations on a trigger 
     // handle async logic for after update   
-    @future 
-    public static void OnAfterUpdateAsync(Set<ID> newTxnItems)
+    @future(callout=true)
+    public static void OnAfterUpdateAsync(Set<Id> recIds)
     {
-        //logic
+        //check transaction Items match the criteria to makemake API call
+		TransactionItemsBusinesslogic.syncTransactions(recIds);
+    } 
+    
+	//this method can be used to perform async operations on a trigger 
+    // handle async logic for after update   
+    @future(callout=true)
+    public static void OnAfterInsertAsync(Set<Id> recIds)
+    {
+        //check transaction Items match the criteria to makemake API call
+		TransactionItemsBusinesslogic.syncTransactions(recIds);
     } 
 
 }
